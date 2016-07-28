@@ -11,28 +11,11 @@ window.app = angular.module('app', requires);
 require('./templates');
 require('./controllers');
 
-app.config(['$stateProvider', '$urlRouterProvider', 
-  function($stateProvider, $urlRouterProvider) {
-  
-  $urlRouterProvider.otherwise("/");
+var config = require('./config');
+var run = require('./run');
 
-  $stateProvider
-  .state('Home', {
-    url: '/',
-    controller: 'HomeCtrl as home',
-    templateUrl: 'home.html',
-    title: 'Home'
-  });
-}]);
-
-angular.module('app').run(['$rootScope', function ($rootScope) {
-  $rootScope.$on('$stateChangeSuccess', function(event, toState){
-    $rootScope.pageTitle = '';
-    if (toState.title) {
-      $rootScope.pageTitle = toState.title;
-    }
-  });
-}]);
+app.config(['$stateProvider', '$urlRouterProvider', config]);
+angular.module('app').run(['$rootScope', run]);
 
 angular.bootstrap(document, ['app'], {
   strictDi: true
