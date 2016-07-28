@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var gulpif = require('gulp-if');
 var sass = require('gulp-ruby-sass');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
@@ -9,9 +10,9 @@ var stylish = require('jshint-stylish');
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
 var runSequence = require('run-sequence');
-
-
-require('jshint-stylish');
+var del = require('del');
+var uglify = require('gulp-uglify');
+var buffer = require('vinyl-buffer');
 
 gulp.task('serve', function() {
   browserSync({
@@ -25,19 +26,21 @@ gulp.task('serve', function() {
 gulp.task('browserify', function() {
   return browserify({
     entries: ['./app/js/main.js'],
-    debug: true
+    debug: !global.isProd
   })
   .bundle()
   .pipe(source('main.js'))
+  .pipe(gulpif(global.isProd, buffer()))
+  .pipe(gulpif(global.isProd, uglify()))
   .pipe(gulp.dest('./dist/js/'))
   .pipe(browserSync.stream());
-})
+});
 
 gulp.task('sass', function() {
   return sass('./app/styles/style.scss')
   .pipe(gulp.dest('./dist/css'))
   .pipe(browserSync.stream());
-})
+});
 
 gulp.task('views', function() {
   var indexFile = gulp.src('./app/index.html')
@@ -63,10 +66,20 @@ gulp.task('watch', function() {
   gulp.watch('./app/**/*.js', ['lint', 'browserify']);
   gulp.watch('./app/**/*.scss', ['sass']);
   gulp.watch('app/views/**/*.html', ['views']);
-})
-
-gulp.task('default', function() {
-  runSequence('lint', ['browserify', 'views'], 'watch', 'serve');
 });
 
-//gulp.task('default', ['lint', 'serve', 'browserify', 'views', 'watch'])
+gulp.task('clean', function() {
+  return del('./dist');
+});
+
+gulp.task('default', ['dev']);
+
+gulp.task('dev', function() {
+  global.isProd = false;
+  runSequence('clean', 'lint', ['browserify', 'views', 'sass'], 'watch', 'serve');
+});
+
+gulp.task('prod', function() {
+  global.isProd = true;
+  runSequence('clean', 'lint', ['browserify', 'views', 'sass'], 'watch', 'serve');
+});

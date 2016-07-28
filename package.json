@@ -28,15 +28,18 @@
     "angular-ui-router": "^0.3.1",
     "browser-sync": "^2.13.0",
     "browserify": "^13.1.0",
-    "bulk-require": "^1.0.0",
+    "del": "^2.2.1",
     "gulp": "^3.9.1",
     "gulp-angular-templatecache": "^2.0.0",
+    "gulp-if": "^2.0.1",
     "gulp-jshint": "^2.0.1",
     "gulp-ruby-sass": "^2.0.6",
+    "gulp-uglify": "^1.5.4",
     "jshint": "^2.9.2",
     "jshint-stylish": "^2.2.0",
     "merge-stream": "^1.0.0",
     "run-sequence": "^1.2.2",
+    "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   }
 }
