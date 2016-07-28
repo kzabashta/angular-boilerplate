@@ -6,12 +6,13 @@ var requires = [
   'templates'
 ];
 
-window.app = angular.module('app', requires)
+window.app = angular.module('app', requires);
 
 require('./templates');
 require('./controllers');
 
-app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+app.config(['$stateProvider', '$urlRouterProvider', 
+  function($stateProvider, $urlRouterProvider) {
   
   $urlRouterProvider.otherwise("/");
 
