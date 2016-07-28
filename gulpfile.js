@@ -18,7 +18,10 @@ gulp.task('connect', function () {
 })
 
 gulp.task('browserify', function() {
-  return browserify('./app/js/main.js')
+  return browserify({
+    entries: ['./app/js/main.js'],
+    debug: true
+  })
   .bundle()
   .pipe(source('main.js'))
   .pipe(gulp.dest('./dist/js/'));
