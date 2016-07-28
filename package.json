@@ -36,6 +36,7 @@
     "jshint": "^2.9.2",
     "jshint-stylish": "^2.2.0",
     "merge-stream": "^1.0.0",
+    "run-sequence": "^1.2.2",
     "vinyl-source-stream": "^1.1.0"
   }
 }

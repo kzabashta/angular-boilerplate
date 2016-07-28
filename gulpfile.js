@@ -8,6 +8,8 @@ var jshint = require('gulp-jshint');
 var stylish = require('jshint-stylish');
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
+var runSequence = require('run-sequence');
+
 
 require('jshint-stylish');
 
@@ -27,12 +29,14 @@ gulp.task('browserify', function() {
   })
   .bundle()
   .pipe(source('main.js'))
-  .pipe(gulp.dest('./dist/js/'));
+  .pipe(gulp.dest('./dist/js/'))
+  .pipe(browserSync.stream());
 })
 
 gulp.task('sass', function() {
   return sass('./app/styles/style.scss')
   .pipe(gulp.dest('./dist/css'))
+  .pipe(browserSync.stream());
 })
 
 gulp.task('views', function() {
@@ -51,14 +55,18 @@ gulp.task('views', function() {
 gulp.task('lint', function() {
   return gulp.src('app/js/**/*.js')
     .pipe(jshint())
-    .pipe(jshint.reporter('jshint-stylish'))
+    .pipe(jshint.reporter('jshint-stylish', {beep: true}))
     .pipe(jshint.reporter('fail'));
 });
 
 gulp.task('watch', function() {
-  gulp.watch('./app/**/*.js', ['browserify'])
-  gulp.watch('./app/**/*.scss', ['sass'])
-  gulp.watch('app/views/**/*.html', ['views'])
+  gulp.watch('./app/**/*.js', ['lint', 'browserify']);
+  gulp.watch('./app/**/*.scss', ['sass']);
+  gulp.watch('app/views/**/*.html', ['views']);
 })
 
-gulp.task('default', ['lint', 'serve', 'browserify', 'views', 'watch'])
+gulp.task('default', function() {
+  runSequence('lint', ['browserify', 'views'], 'watch', 'serve');
+});
+
+//gulp.task('default', ['lint', 'serve', 'browserify', 'views', 'watch'])
