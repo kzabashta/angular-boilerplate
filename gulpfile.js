@@ -83,3 +83,8 @@ gulp.task('prod', function() {
   global.isProd = true;
   runSequence('clean', 'lint', ['browserify', 'views', 'sass'], 'watch', 'serve');
 });
+
+gulp.task('build', function() {
+  global.isProd = true;
+  runSequence('clean', 'lint', ['browserify', 'views', 'sass']);
+});
