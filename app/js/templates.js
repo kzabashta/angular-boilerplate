@@ -1,1 +1,1 @@
-angular.module('templates', []).run(['$templateCache', function($templateCache) {$templateCache.put('view1.html','<div>\n\t\t<h1>Hey</h1>\n</div>\n');}]);
+angular.module('templates', []).run(['$templateCache', function($templateCache) {$templateCache.put('home.html','<div>\n\t\t<h1>{{message}}</h1>\n</div>\n');}]);

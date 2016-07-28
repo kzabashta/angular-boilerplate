@@ -18,9 +18,18 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
   $stateProvider
   .state('Home', {
     url: '/',
-    controller: 'MainController as home',
-    templateUrl: 'view1.html',
+    controller: 'HomeCtrl as home',
+    templateUrl: 'home.html',
     title: 'Home'
+  });
+}]);
+
+angular.module('app').run(['$rootScope', function ($rootScope) {
+  $rootScope.$on('$stateChangeSuccess', function(event, toState){
+    $rootScope.pageTitle = '';
+    if (toState.title) {
+      $rootScope.pageTitle = toState.title;
+    }
   });
 }]);
 
