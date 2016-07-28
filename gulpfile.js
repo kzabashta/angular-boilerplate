@@ -1,21 +1,24 @@
 var gulp = require('gulp');
 var sass = require('gulp-ruby-sass');
-var connect = require('gulp-connect');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var templateCache = require('gulp-angular-templatecache');
 var merge = require('merge-stream');
 var jshint = require('gulp-jshint');
 var stylish = require('jshint-stylish');
+var browserSync = require('browser-sync');
+var reload = browserSync.reload;
 
 require('jshint-stylish');
 
-gulp.task('connect', function () {
-  connect.server({
-    root: 'dist',
-    port: 3000
-  })
-})
+gulp.task('serve', function() {
+  browserSync({
+    server: {
+      baseDir: 'dist',
+      port: 3000
+    }
+  });
+});
 
 gulp.task('browserify', function() {
   return browserify({
@@ -48,7 +51,8 @@ gulp.task('views', function() {
 gulp.task('lint', function() {
   return gulp.src('app/js/**/*.js')
     .pipe(jshint())
-    .pipe(jshint.reporter('default'));
+    .pipe(jshint.reporter('jshint-stylish'))
+    .pipe(jshint.reporter('fail'));
 });
 
 gulp.task('watch', function() {
@@ -57,4 +61,4 @@ gulp.task('watch', function() {
   gulp.watch('app/views/**/*.html', ['views'])
 })
 
-gulp.task('default', ['connect', 'browserify', 'views', 'watch'])
+gulp.task('default', ['lint', 'serve', 'browserify', 'views', 'watch'])
